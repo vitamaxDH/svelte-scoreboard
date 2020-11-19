@@ -1,38 +1,38 @@
 <script>
-	let name = "John Doe";
-	let points = 100;
-	let showControls = false;
+	import Navbar from './Navbar.svelte';
+	import Player from './Player.svelte';
+	import AddPlayer from './AddPlayer.svelte';
 
-	const addPoint = () => (points += 1);
-	const removePoint = () => (points -= 1);
-	const toggleControls = () => (showControls = !showControls);
+	let players = [
+		{
+			name: "John Doe",
+			points: 53
+		},
+		{
+			name: "Sam Smith",
+			points: 45
+		},
+		{
+			name: "Sara Wilson",
+			points: 34
+		}
+	];
+
+	const addPlayer = (e) => {
+		console.log ('e', e);
+		const newPlayer = e.detail;
+		players = [...players, newPlayer];
+	}
 </script>
 
-
-<style>
-	h1 {
-		color: #204f6e;
-	}
-	
-	h3 {
-		margin-bottom: 10px;
-	}
-
-</style>
-
+<Navbar />
 <div class="container">
-	<div class="card">
-		<h1>
-			{name}
-			<button class="btn btn-sm" on:click="{toggleControls}">
-				{#if showControls}-{:else}+{/if}
-			</button>
-		</h1>
-		<h3>points : {points}</h3>
-		{#if showControls}
-			<button class="btn" on:click="{addPoint}">+1</button>
-			<button class="btn btn-dark" on:click="{removePoint}">-1</button>
-			<input type="number" bind:value="{points}" />
-		{/if}
-	</div>
+	<AddPlayer on:addplayer={addPlayer}/>
+	{#if players.length === 0}
+	<p>No Players</p>
+	{:else}
+		{#each players as player}
+			<Player name={player.name} points={player.points}/>
+		{/each}
+	{/if}
 </div>
